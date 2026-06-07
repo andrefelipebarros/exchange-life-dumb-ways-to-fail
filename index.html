@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Exchange Life - Dumb Ways to Fail</title>
+  <link rel="stylesheet" href="src/styles.css" />
+</head>
+<body>
+  <main id="app" class="app">
+    <div class="timer-line" aria-hidden="true">
+      <div id="timerFill" class="timer-fill"></div>
+    </div>
+
+    <section id="menuScreen" class="screen menu-screen is-active">
+      <div class="menu-overlay"></div>
+
+      <div class="menu-content">
+        <div class="brand">
+          <h1><span>EXCHANGE</span><strong>LIFE</strong></h1>
+          <p>Dumb Ways to Fail</p>
+        </div>
+
+        <button id="playButton" class="primary-button">PLAY</button>
+
+        <div class="menu-side-buttons" aria-label="Ações do menu">
+          <button id="audioButton" class="icon-menu-button" type="button" title="Audio settings" aria-label="Audio settings">🔊</button>
+          <button id="youtubeButton" class="icon-menu-button" type="button" title="YouTube video" aria-label="YouTube video">▶</button>
+          <button id="characterButton" class="icon-menu-button" type="button" title="Create character" aria-label="Create character">👤</button>
+          <button id="scoreboardButton" class="icon-menu-button" type="button" title="Leaderboard" aria-label="Leaderboard">🏆</button>
+        </div>
+      </div>
+
+      <div class="future-characters-slot" aria-hidden="true">
+        <!-- Add future school character sprites here -->
+      </div>
+
+      <small class="mobile-tip">Best played in landscape mode.</small>
+    </section>
+
+    <section id="commandScreen" class="screen command-screen">
+      <h2 id="commandText">TYPE!</h2>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen">
+      <div class="password-game">
+        <div class="keypad-panel" aria-label="password panel">
+          <div class="panel-top">
+            <span class="target-password">0616B</span>
+
+            <div class="lights" aria-label="result">
+              <span id="redLight" class="light red"></span>
+              <span id="greenLight" class="light green"></span>
+            </div>
+          </div>
+
+          <div id="typedDisplay" class="typed-display">-----</div>
+
+          <div id="keys" class="keys">
+            <button data-key="1">1</button>
+            <button data-key="2">2</button>
+            <button data-key="3">3</button>
+
+            <button data-key="4">4</button>
+            <button data-key="5">5</button>
+            <button data-key="6">6</button>
+
+            <button data-key="7">7</button>
+            <button data-key="8">8</button>
+            <button data-key="9">9</button>
+
+            <button data-key="B">B</button>
+            <button data-key="0">0</button>
+            <button data-key="C">C</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="resultScreen" class="screen result-screen">
+      <div id="resultCard" class="result-card">
+        <h2 id="resultTitle">OK!</h2>
+
+        <div class="video-stage">
+          <video id="resultVideo" class="result-video" muted playsinline></video>
+          <div id="videoPlaceholder" class="video-placeholder">FUTURE VIDEO</div>
+        </div>
+
+        <p id="resultMessage">Going to the next minigame...</p>
+      </div>
+    </section>
+
+    <section id="lifeLostScreen" class="screen life-lost-screen">
+      <div class="life-card">
+        <h2>LIFE -1</h2>
+        <p id="livesMessage">2 lives left</p>
+
+        <div id="lifeMarkers" class="life-markers" aria-label="vidas restantes"></div>
+
+        <small>Next minigame...</small>
+      </div>
+    </section>
+
+    <section id="gameOverScreen" class="screen game-over-screen">
+      <div class="game-over-card">
+        <h2>GAME OVER</h2>
+        <p>You lost all lives.</p>
+        <button id="restartButton" class="primary-button">RESTART</button>
+      </div>
+    </section>
+
+    <section id="characterScreen" class="overlay-screen character-screen" aria-hidden="true">
+      <div class="overlay-card character-card">
+        <button id="closeCharacterButton" class="close-overlay-button" type="button" aria-label="Fechar">×</button>
+
+        <h2>CREATE CHARACTER</h2>
+        <p class="overlay-subtitle">Create your exchange student and save your score to the local leaderboard.</p>
+
+        <div class="character-layout">
+          <div class="character-preview" aria-label="Character preview">
+            <div id="avatarPreview" class="avatar-preview avatar-hair-1 avatar-shirt-1 avatar-skin-1">
+              <span class="avatar-hair"></span>
+              <span class="avatar-head">
+                <span class="avatar-eye left"></span>
+                <span class="avatar-eye right"></span>
+                <span class="avatar-mouth"></span>
+              </span>
+              <span class="avatar-body"></span>
+            </div>
+          </div>
+
+          <form id="characterForm" class="character-form">
+            <label>
+              Nome
+              <input id="playerNameInput" maxlength="18" placeholder="Ex: Alex" autocomplete="off" />
+            </label>
+
+            <label>
+              Turma / sala
+              <input id="playerClassInput" maxlength="18" placeholder="Ex: 3rd Year" autocomplete="off" />
+            </label>
+
+            <div class="character-options">
+              <span>Hair</span>
+              <div class="option-buttons" data-option="hair">
+                <button type="button" data-value="1" class="is-selected">1</button>
+                <button type="button" data-value="2">2</button>
+                <button type="button" data-value="3">3</button>
+              </div>
+            </div>
+
+            <div class="character-options">
+              <span>Outfit</span>
+              <div class="option-buttons" data-option="shirt">
+                <button type="button" data-value="1" class="is-selected">1</button>
+                <button type="button" data-value="2">2</button>
+                <button type="button" data-value="3">3</button>
+              </div>
+            </div>
+
+            <div class="character-options">
+              <span>Character</span>
+              <div class="option-buttons" data-option="skin">
+                <button type="button" data-value="1" class="is-selected">1</button>
+                <button type="button" data-value="2">2</button>
+                <button type="button" data-value="3">3</button>
+              </div>
+            </div>
+
+            <button id="saveCharacterButton" class="save-character-button" type="submit">SAVE</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="scoreboardScreen" class="overlay-screen scoreboard-screen" aria-hidden="true">
+      <div class="overlay-card scoreboard-card">
+        <button id="closeScoreboardButton" class="close-overlay-button" type="button" aria-label="Fechar">×</button>
+
+        <h2>LEADERBOARD</h2>
+        <p class="overlay-subtitle">For now, scores are saved in this browser. Later, this can be connected to a backend.</p>
+
+        <div id="currentPlayerCard" class="current-player-card"></div>
+        <ol id="scoreboardList" class="scoreboard-list"></ol>
+
+        <button id="clearScoreboardButton" class="clear-scoreboard-button" type="button">CLEAR LOCAL LEADERBOARD</button>
+      </div>
+    </section>
+
+    <section id="audioSettings" class="audio-settings" aria-hidden="true">
+      <div class="audio-card">
+        <button id="closeAudioButton" class="close-audio-button" type="button" aria-label="Close settings">×</button>
+
+        <h2>AUDIO</h2>
+
+        <label class="audio-option">
+          <span>Game sounds</span>
+          <button id="soundToggleButton" class="toggle-button is-on" type="button">ON</button>
+        </label>
+
+        <label class="audio-slider">
+          <span>Volume</span>
+          <input id="volumeSlider" type="range" min="0" max="100" value="70" />
+        </label>
+
+        <small>Later, you can split music, effects, and narration here.</small>
+      </div>
+    </section>
+
+    <section id="orientationWarning" class="orientation-warning">
+      <div class="phone-icon">📱↔️</div>
+      <h2>ROTATE YOUR PHONE</h2>
+      <p>This game works best in landscape mode.</p>
+    </section>
+  </main>
+
+  <script src="src/game.js"></script>
+</body>
+</html>
