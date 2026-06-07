@@ -1280,3 +1280,418 @@ button {
     transform: scale(.9);
   }
 }
+
+
+/* ================================
+   Mobile landscape fit correction
+   ================================ */
+
+html,
+body {
+  min-width: 100%;
+  min-height: 100%;
+  height: 100%;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+}
+
+.screen {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+}
+
+.game-screen.is-active {
+  padding:
+    max(10px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right))
+    max(10px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+  align-items: center;
+  justify-items: center;
+}
+
+.password-game {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.keypad-panel {
+  max-height: calc(100dvh - 28px);
+  overflow: visible;
+}
+
+/* Celular deitado com barra do navegador aparecendo */
+@media (orientation: landscape) and (max-height: 620px) {
+  .timer-line {
+    height: 5px;
+  }
+
+  .game-screen.is-active {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .keypad-panel {
+    width: min(356px, 58vw);
+    max-height: calc(100dvh - 18px);
+    padding: clamp(9px, 2.2dvh, 14px);
+    box-shadow: 0 9px 0 rgba(0, 0, 0, .12);
+  }
+
+  .panel-top {
+    margin-bottom: clamp(5px, 1.4dvh, 9px);
+  }
+
+  .target-password {
+    min-width: auto;
+    padding: clamp(4px, 1.2dvh, 7px) clamp(8px, 2vw, 12px);
+    font-size: clamp(18px, 5.2dvh, 28px);
+    letter-spacing: clamp(2px, .65vw, 5px);
+  }
+
+  .light {
+    width: clamp(16px, 4.8dvh, 24px);
+    height: clamp(16px, 4.8dvh, 24px);
+  }
+
+  .typed-display {
+    height: clamp(30px, 10.5dvh, 44px);
+    margin-bottom: clamp(6px, 1.8dvh, 10px);
+    font-size: clamp(16px, 4.6dvh, 26px);
+    letter-spacing: clamp(5px, 1.3vw, 8px);
+  }
+
+  .keys {
+    gap: clamp(6px, 1.8dvh, 10px);
+  }
+
+  .keys button {
+    aspect-ratio: auto;
+    height: clamp(32px, 11.6dvh, 52px);
+    font-size: clamp(18px, 5dvh, 30px);
+    box-shadow: inset 0 -4px 0 rgba(0, 0, 0, .25);
+  }
+}
+
+/* Celulares bem baixos no modo paisagem */
+@media (orientation: landscape) and (max-height: 430px) {
+  .keypad-panel {
+    width: min(320px, 54vw);
+    padding: 8px;
+  }
+
+  .typed-display {
+    height: 28px;
+    margin-bottom: 6px;
+  }
+
+  .keys {
+    gap: 6px;
+  }
+
+  .keys button {
+    height: clamp(28px, 10.5dvh, 42px);
+    font-size: clamp(16px, 4.7dvh, 24px);
+  }
+
+  .target-password {
+    font-size: clamp(16px, 5dvh, 24px);
+  }
+
+  .light {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Menu em celular deitado: evita botões e logo saírem da área útil */
+@media (orientation: landscape) and (max-height: 620px) {
+  .menu-screen .brand {
+    top: clamp(12px, 4dvh, 24px);
+  }
+
+  .menu-screen .brand h1 {
+    font-size: clamp(46px, 15dvh, 82px);
+    letter-spacing: -4px;
+  }
+
+  .menu-screen .brand p {
+    padding: 5px 18px;
+    font-size: clamp(12px, 3.4dvh, 18px);
+  }
+
+  .menu-screen .primary-button {
+    bottom: clamp(22px, 9dvh, 48px);
+    padding: clamp(10px, 3dvh, 15px) clamp(30px, 5vw, 48px);
+    font-size: clamp(18px, 5dvh, 28px);
+    border-radius: 20px;
+  }
+
+  .menu-side-buttons {
+    right: max(12px, env(safe-area-inset-right));
+    gap: 8px;
+  }
+
+  .icon-menu-button {
+    width: clamp(42px, 11dvh, 56px);
+    height: clamp(42px, 11dvh, 56px);
+    border-radius: 16px;
+    font-size: clamp(18px, 5dvh, 26px);
+    box-shadow: 0 5px 0 rgba(133, 14, 66, .95), 0 10px 18px rgba(0, 0, 0, .18);
+  }
+}
+
+/* Tela de resultado em celular: mantém texto dentro da área útil */
+@media (orientation: landscape) and (max-height: 620px) {
+  .result-card h2 {
+    top: max(16px, env(safe-area-inset-top));
+    font-size: clamp(44px, 15dvh, 86px);
+  }
+
+  .result-card p {
+    bottom: max(14px, env(safe-area-inset-bottom));
+    font-size: clamp(14px, 3.8dvh, 20px);
+  }
+
+  .life-card,
+  .game-over-card,
+  .overlay-card,
+  .audio-card {
+    max-height: calc(100dvh - 28px);
+    overflow: auto;
+  }
+}
+
+
+/* ==========================================================
+   V2: ajuste real para celular deitado / viewport baixo
+   O painel agora se encaixa pela ALTURA disponível, não pela largura.
+   ========================================================== */
+
+html,
+body,
+.app,
+.screen {
+  width: 100%;
+  height: 100dvh;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+
+.game-screen.is-active {
+  display: grid !important;
+  place-items: center !important;
+  width: 100vw;
+  height: 100dvh;
+  padding:
+    max(6px, env(safe-area-inset-top))
+    max(8px, env(safe-area-inset-right))
+    max(6px, env(safe-area-inset-bottom))
+    max(8px, env(safe-area-inset-left)) !important;
+  overflow: hidden !important;
+}
+
+.password-game {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.keypad-panel {
+  /* tamanho principal controlado por altura, para não cortar no celular */
+  --panel-h: min(92dvh, 430px);
+  --panel-w: min(86vw, calc(var(--panel-h) * .82));
+
+  width: var(--panel-w) !important;
+  height: var(--panel-h) !important;
+  max-width: none !important;
+  max-height: none !important;
+
+  padding: clamp(8px, 2dvh, 18px) !important;
+  display: grid !important;
+  grid-template-rows: auto auto 1fr;
+  gap: clamp(6px, 1.4dvh, 12px);
+  overflow: hidden !important;
+  transform: none !important;
+}
+
+.panel-top {
+  margin: 0 !important;
+  min-height: 0;
+}
+
+.target-password {
+  min-width: 0 !important;
+  padding: clamp(4px, 1.1dvh, 8px) clamp(8px, 2vw, 14px) !important;
+  font-size: clamp(17px, 5.2dvh, 30px) !important;
+  line-height: 1 !important;
+  letter-spacing: clamp(2px, .75vw, 5px) !important;
+}
+
+.light {
+  width: clamp(15px, 4.7dvh, 24px) !important;
+  height: clamp(15px, 4.7dvh, 24px) !important;
+}
+
+.typed-display {
+  height: auto !important;
+  min-height: clamp(28px, 10dvh, 50px) !important;
+  margin: 0 !important;
+  font-size: clamp(16px, 5dvh, 30px) !important;
+  line-height: 1 !important;
+  letter-spacing: clamp(4px, 1.2vw, 8px) !important;
+}
+
+.keys {
+  height: 100% !important;
+  min-height: 0;
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: clamp(6px, 1.6dvh, 12px) !important;
+}
+
+.keys button {
+  width: 100%;
+  height: 100% !important;
+  min-height: 0 !important;
+  aspect-ratio: auto !important;
+  display: grid;
+  place-items: center;
+  padding: 0 !important;
+  font-size: clamp(18px, 6dvh, 34px) !important;
+  line-height: 1 !important;
+}
+
+/* Quando a tela fica muito baixa, fica ainda mais compacto */
+@media (orientation: landscape) and (max-height: 420px) {
+  .timer-line {
+    height: 4px !important;
+  }
+
+  .game-screen.is-active {
+    padding: 4px 8px !important;
+  }
+
+  .keypad-panel {
+    --panel-h: min(94dvh, 340px);
+    --panel-w: min(82vw, calc(var(--panel-h) * .86));
+    padding: 7px !important;
+    gap: 6px !important;
+  }
+
+  .typed-display {
+    min-height: clamp(24px, 8.8dvh, 34px) !important;
+  }
+
+  .keys {
+    gap: 6px !important;
+  }
+
+  .keys button {
+    font-size: clamp(17px, 6dvh, 26px) !important;
+  }
+
+  .target-password {
+    font-size: clamp(16px, 5.6dvh, 25px) !important;
+  }
+}
+
+/* Firefox/desktop simulando celular, com altura útil muito pequena */
+@media (orientation: landscape) and (max-height: 340px) {
+  .keypad-panel {
+    --panel-h: calc(100dvh - 10px);
+    --panel-w: min(78vw, calc(var(--panel-h) * .92));
+    padding: 6px !important;
+  }
+
+  .typed-display {
+    min-height: 24px !important;
+  }
+
+  .keys {
+    gap: 5px !important;
+  }
+
+  .light {
+    width: 14px !important;
+    height: 14px !important;
+  }
+}
+
+/* Caso o navegador antigo não entenda dvh */
+@supports not (height: 100dvh) {
+  html,
+  body,
+  .app,
+  .screen {
+    height: 100vh;
+  }
+
+  .game-screen.is-active {
+    height: 100vh;
+  }
+
+  .keypad-panel {
+    --panel-h: min(92vh, 430px);
+  }
+}
+
+
+/* ================================
+   Game over actions
+   ================================ */
+
+.game-over-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.game-over-actions .primary-button {
+  margin: 0;
+}
+
+.lobby-button {
+  padding: 16px 34px;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-size: clamp(18px, 3vw, 32px);
+  font-weight: 1000;
+  letter-spacing: 1px;
+  box-shadow: 0 10px 0 rgba(0, 0, 0, .24);
+}
+
+.lobby-button:active {
+  transform: translateY(7px);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, .24);
+}
+
+@media (orientation: landscape) and (max-height: 620px) {
+  .game-over-actions {
+    margin-top: 16px;
+    gap: 12px;
+  }
+
+  .lobby-button,
+  .game-over-actions .primary-button {
+    padding: 11px 24px;
+    font-size: clamp(16px, 4.2dvh, 24px);
+  }
+}

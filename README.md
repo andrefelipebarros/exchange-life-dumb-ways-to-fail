@@ -239,3 +239,72 @@ exchange-life-dumb-ways-to-fail/
 - Add character sprites to the menu.
 - Add a real backend leaderboard.
 - Deploy the game with GitHub Pages.
+
+
+## Mobile fix
+
+This version includes a specific mobile landscape correction.
+
+What was changed:
+
+- the game now uses `100dvh` to respect the real mobile browser viewport;
+- the password panel becomes smaller on landscape phones;
+- keypad buttons reduce their height when the browser address bar is visible;
+- safe-area padding was added;
+- a fullscreen button was added to the menu;
+- a web manifest was added with `display: fullscreen` and `orientation: landscape`.
+
+### Best mobile test
+
+On Android/Chrome:
+
+1. Open the GitHub Pages link.
+2. Tap the fullscreen button `⛶` in the menu.
+3. If the browser blocks fullscreen, tap Chrome menu → **Add to Home screen**.
+4. Open the game from the home screen.
+
+This removes most of the address bar problem.
+
+
+## Mobile fit v2
+
+This version changes the password minigame sizing strategy.
+
+Instead of making the keypad panel primarily based on screen width, it now fits based on the available screen height. This prevents the bottom row of the keypad from being cut off when the phone is in landscape mode and the browser address bar is visible.
+
+Main CSS idea:
+
+```css
+.keypad-panel {
+  --panel-h: min(92dvh, 430px);
+  --panel-w: min(86vw, calc(var(--panel-h) * .82));
+  height: var(--panel-h);
+  width: var(--panel-w);
+}
+```
+
+
+## Game Over lobby button
+
+The Game Over screen now has two options:
+
+- `RESTART`: starts a new run immediately.
+- `LOBBY`: returns to the main menu without starting the game again.
+
+
+## Fix: password input not advancing
+
+A JavaScript error was stopping the keypad click handler from being registered.
+
+Cause:
+
+```text
+game.js was trying to add a click event to fullscreenButton,
+but the button was missing from index.html.
+```
+
+Fix applied:
+
+- added the missing fullscreen button to the menu;
+- made optional menu button event listeners safer with optional chaining;
+- preserved the password flow: entering `0616B` now advances to the success result screen again.

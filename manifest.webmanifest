@@ -1,0 +1,10 @@
+{
+  "name": "Exchange Life: Dumb Ways to Fail",
+  "short_name": "Exchange Life",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#fac75f",
+  "theme_color": "#fac75f",
+  "icons": []
+}

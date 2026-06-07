@@ -24,10 +24,12 @@ const screens = {
 const ui = {
   playButton: document.getElementById("playButton"),
   restartButton: document.getElementById("restartButton"),
+  lobbyButton: document.getElementById("lobbyButton"),
   audioButton: document.getElementById("audioButton"),
   youtubeButton: document.getElementById("youtubeButton"),
   characterButton: document.getElementById("characterButton"),
   scoreboardButton: document.getElementById("scoreboardButton"),
+  fullscreenButton: document.getElementById("fullscreenButton"),
   characterScreen: document.getElementById("characterScreen"),
   closeCharacterButton: document.getElementById("closeCharacterButton"),
   characterForm: document.getElementById("characterForm"),
@@ -82,8 +84,8 @@ const state = {
 };
 
 function showScreen(name) {
-  Object.values(screens).forEach(screen => screen.classList.remove("is-active"));
-  screens[name].classList.add("is-active");
+  Object.values(screens).forEach(screen => screen?.classList.remove("is-active"));
+  screens[name]?.classList.add("is-active");
 }
 
 function ensureAudio() {
@@ -222,6 +224,8 @@ function pressKey(key) {
   setTypedDisplay();
 
   if (state.input.length === PASSWORD.length) {
+    console.log("Password completed:", state.input);
+
     if (state.input === PASSWORD) {
       finishRound(true, "OK!", "Next minigame...");
     } else {
@@ -326,6 +330,8 @@ function endGame() {
 }
 
 function updateAudioUi() {
+  if (!ui.soundToggleButton || !ui.volumeSlider) return;
+
   ui.soundToggleButton.textContent = state.soundEnabled ? "ON" : "OFF";
   ui.soundToggleButton.classList.toggle("is-on", state.soundEnabled);
   ui.volumeSlider.value = Math.round(state.volume * 100);
@@ -538,40 +544,78 @@ function escapeHtml(value) {
   })[character]);
 }
 
-ui.playButton.addEventListener("click", startGame);
-ui.restartButton.addEventListener("click", startGame);
-ui.audioButton.addEventListener("click", openAudioSettings);
-ui.youtubeButton.addEventListener("click", openYoutubeVideo);
-ui.characterButton.addEventListener("click", openCharacterScreen);
-ui.scoreboardButton.addEventListener("click", openScoreboardScreen);
-ui.closeCharacterButton.addEventListener("click", closeCharacterScreen);
-ui.closeScoreboardButton.addEventListener("click", closeScoreboardScreen);
-ui.characterForm.addEventListener("submit", handleCharacterSubmit);
-ui.clearScoreboardButton.addEventListener("click", clearScoreboard);
-document.querySelectorAll(".option-buttons").forEach(group => group.addEventListener("click", handleCharacterOptionClick));
-ui.closeAudioButton.addEventListener("click", closeAudioSettings);
-ui.soundToggleButton.addEventListener("click", toggleSound);
-ui.volumeSlider.addEventListener("input", event => setVolume(event.target.value));
 
-ui.audioSettings.addEventListener("click", event => {
+function requestGameFullscreen() {
+  const root = document.documentElement;
+
+  if (document.fullscreenElement) {
+    document.exitFullscreen?.();
+    return;
+  }
+
+  root.requestFullscreen?.().catch(() => {
+    alert("Fullscreen was blocked by the browser. On mobile, add the game to the home screen for the best fullscreen experience.");
+  });
+}
+
+function syncViewportHeight() {
+  const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  document.documentElement.style.setProperty("--real-vh", `${height}px`);
+}
+
+
+function goToLobby() {
+  clearTimeout(state.timeoutId);
+  cancelAnimationFrame(state.animationFrame);
+
+  state.input = "";
+  state.canPlay = false;
+  state.resolving = false;
+
+  ui.timerFill.style.transform = "scaleX(0)";
+  ui.typedDisplay.textContent = "-----";
+  ui.redLight.classList.remove("is-on");
+  ui.greenLight.classList.remove("is-on");
+
+  showScreen("menu");
+}
+
+ui.playButton?.addEventListener("click", startGame);
+ui.restartButton?.addEventListener("click", startGame);
+ui.lobbyButton?.addEventListener("click", goToLobby);
+ui.audioButton?.addEventListener("click", openAudioSettings);
+ui.youtubeButton?.addEventListener("click", openYoutubeVideo);
+ui.characterButton?.addEventListener("click", openCharacterScreen);
+ui.scoreboardButton?.addEventListener("click", openScoreboardScreen);
+ui.fullscreenButton?.addEventListener("click", requestGameFullscreen);
+ui.closeCharacterButton?.addEventListener("click", closeCharacterScreen);
+ui.closeScoreboardButton?.addEventListener("click", closeScoreboardScreen);
+ui.characterForm?.addEventListener("submit", handleCharacterSubmit);
+ui.clearScoreboardButton?.addEventListener("click", clearScoreboard);
+document.querySelectorAll(".option-buttons").forEach(group => group.addEventListener("click", handleCharacterOptionClick));
+ui.closeAudioButton?.addEventListener("click", closeAudioSettings);
+ui.soundToggleButton?.addEventListener("click", toggleSound);
+ui.volumeSlider?.addEventListener("input", event => setVolume(event.target.value));
+
+ui.audioSettings?.addEventListener("click", event => {
   if (event.target === ui.audioSettings) {
     closeAudioSettings();
   }
 });
 
-ui.characterScreen.addEventListener("click", event => {
+ui.characterScreen?.addEventListener("click", event => {
   if (event.target === ui.characterScreen) {
     closeCharacterScreen();
   }
 });
 
-ui.scoreboardScreen.addEventListener("click", event => {
+ui.scoreboardScreen?.addEventListener("click", event => {
   if (event.target === ui.scoreboardScreen) {
     closeScoreboardScreen();
   }
 });
 
-ui.keys.addEventListener("click", event => {
+ui.keys?.addEventListener("click", event => {
   const button = event.target.closest("button[data-key]");
   if (!button) return;
 
@@ -615,8 +659,10 @@ window.addEventListener("keydown", event => {
   }
 });
 
-window.addEventListener("resize", updateOrientationWarning);
-window.addEventListener("orientationchange", updateOrientationWarning);
+window.addEventListener("resize", () => { updateOrientationWarning(); syncViewportHeight(); });
+window.addEventListener("orientationchange", () => { updateOrientationWarning(); syncViewportHeight(); });
+window.visualViewport?.addEventListener("resize", syncViewportHeight);
 
 updateOrientationWarning();
+syncViewportHeight();
 updateAudioUi();
